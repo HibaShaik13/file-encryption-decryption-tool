@@ -1,0 +1,64 @@
+Step-by-step: GitHub + Deployment (Vercel)
+
+1) Initialize Git
+   - Open terminal in the project root (file-encryption-decryption-tool)
+   - Commands:
+     git init
+     git add .
+     git commit -m "Initial commit: file encryption/decryption tool"
+
+2) Create a GitHub repository
+   - Go to GitHub -> New repository
+   - Repo name example: file-encryption-decryption-tool
+   - Keep it Public (recommended for portfolio) or Private
+   - Do NOT initialize with a README (this project already has one)
+
+3) Connect local repo to GitHub and push
+   - Replace <YOUR_GITHUB_USERNAME> and <REPO_NAME>
+   - Commands:
+     git branch -M main
+     git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<REPO_NAME>.git
+     git push -u origin main
+
+4) Deploy the frontend (client) on Vercel
+   - Create a new Vercel project and import the GitHub repo
+   - Configure:
+     Root Directory: client
+     Framework Preset: Vite
+     Build Command: npm run build
+     Output Directory: dist
+   - Environment variables (Vercel -> Project -> Settings -> Environment Variables):
+     VITE_API_BASE = https://<YOUR_BACKEND_DEPLOYMENT_URL>/api
+   - Deploy
+
+5) Deploy the backend (server) on Vercel (separately)
+   - Create another Vercel project pointing to the same GitHub repo
+   - Configure:
+     Root Directory: server
+   - Environment variables:
+     CLIENT_ORIGIN = https://<YOUR_FRONTEND_VERCEL_URL>
+     MAX_FILE_MB = 200
+     RATE_LIMIT_WINDOW_MS = 60000
+     RATE_LIMIT_MAX = 60
+   - Deploy
+
+6) Verify deployments
+   - Backend health check:
+     Open: https://<YOUR_BACKEND_DEPLOYMENT_URL>/api/health
+     Expect: {"ok":true}
+   - Frontend:
+     Use the UI, encrypt a small file, then decrypt it back.
+
+Helpful commands
+   - Run backend locally:
+     cd server
+     copy .env.example .env
+     npm install
+     npm run dev
+
+   - Run frontend locally:
+     cd client
+     copy .env.example .env
+     npm install
+     npm run dev
+
