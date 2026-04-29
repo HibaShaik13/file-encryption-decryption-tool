@@ -1,3 +1,6 @@
+app.get('/', (req, res) => {
+  res.send('Server is running')
+})
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
