@@ -9,12 +9,17 @@ function envNumber(name, fallback) {
 
 module.exports = {
   port: envNumber('PORT', 5000),
-  clientOrigin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+
+  // Allow all for now (avoids CORS issues during testing)
+  clientOrigin: process.env.CLIENT_ORIGIN || '*',
+
   maxFileBytes: envNumber('MAX_FILE_MB', 200) * 1024 * 1024,
+
   rateLimit: {
     windowMs: envNumber('RATE_LIMIT_WINDOW_MS', 60_000),
     max: envNumber('RATE_LIMIT_MAX', 60),
   },
-  logDir: path.resolve(process.cwd(), process.env.LOG_DIR || 'logs'),
-}
 
+  // ⚠️ Avoid file logging on Render
+  logDir: path.resolve(process.cwd(), 'logs'),
+}
