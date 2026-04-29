@@ -8,6 +8,8 @@
     "dev:server": "npm run dev --prefix server",
     "build:client": "npm run build --prefix client",
     "start:server": "npm run start --prefix server"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }
-
