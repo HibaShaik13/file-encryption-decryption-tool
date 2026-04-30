@@ -68,8 +68,10 @@ router.post(
       res.setHeader('Content-Disposition', 'attachment; filename="encrypted.zip"')
 
       const archive = archiver('zip', { zlib: { level: 9 } })
-      archive.on('error', (err) => {
-        throw err
+      // In serverless, throwing inside archiver event handlers can crash the function.
+      // Destroying the response prevents an unhandled exception.
+      archive.once('error', (err) => {
+        res.destroy(err)
       })
       archive.pipe(res)
 
@@ -133,8 +135,9 @@ router.post(
       res.setHeader('Content-Disposition', 'attachment; filename="decrypted.zip"')
 
       const archive = archiver('zip', { zlib: { level: 9 } })
-      archive.on('error', (err) => {
-        throw err
+      // Same hardening as encrypt route: avoid unhandled throw in event handler.
+      archive.once('error', (err) => {
+        res.destroy(err)
       })
       archive.pipe(res)
 
